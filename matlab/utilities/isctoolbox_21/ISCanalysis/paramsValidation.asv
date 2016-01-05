@@ -1,0 +1,18 @@
+function [Params,flag] = paramsValidation(Params)
+
+h.Pub = Params.PublicParams;
+
+h = validateDataAndParams(h);
+
+if h.validFlag
+    disp('Parameter validation successful! Type "runAnalysis(Params)" to start analysis.')
+    Pr.PublicParams = h.Pub;
+    Pr.PrivateParams = h.Priv;
+    Params = Pr;
+else
+    disp('Validation validation failed! You must set parameters correctly before running the analysis.')
+end
+
+
+if nargout == 2
+    
