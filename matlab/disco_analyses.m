@@ -1,4 +1,22 @@
-% Song Synchrony
+% Pipeline Validity and Reliability
+
+disco_validity_anova    % Comparison of discriminability / validity of different pipelines
+disco_reliability_anova % Comparison of agreebement / reliability of different pipelines
+
+
+% Song Segment Synchrony
+
+load('/SCR/ellamil/ravestudy_stats/disco/disco_parser.mat','samplerateMSall');
+samplerate = ceil(samplerateMSall);
+
+[model,ftest,stats,contrasts,segment,SYNCnorm,SYNCcond] = disco_segment(...
+    '/SCR/ellamil/ravestudy_stats/disco/disco_ips_coif1_mean_linear_zalign.mat',...
+    '/SCR/ellamil/ravestudy_stats/disco/disco_millisecond_songparts.mat',...
+    '/SCR/ellamil/ravestudy_stats/disco/disco_millisecond_wholesongs.mat',...
+    samplerate);
+
+
+% Whole Song Synchrony
 
 load('/SCR/ellamil/ravestudy_stats/disco/disco_parser.mat','samplerateMSall');
 samplerate = ceil(samplerateMSall);
@@ -9,7 +27,7 @@ samplerate = ceil(samplerateMSall);
     samplerate);
 
 
-% Song Popularity
+% Song Popularity Correlation
 
 % Number of song plays / scrobbles
 SCROBsong = ... 
@@ -39,13 +57,16 @@ SCROBartist = ...
 [RHOartist(1),RHOartist(2)] = corr(SYNCpart(:,1),SCROBartist,'type','spearman'); % Artist popularity (r,p)
 
 
-% Song Segments
+% Music Features Correlations
 
-load('/SCR/ellamil/ravestudy_stats/disco/disco_parser.mat','samplerateMSall');
-samplerate = ceil(samplerateMSall);
+disco_mir % Music feature time course extraction script
 
-[model,ftest,stats,contrasts,segment] = disco_segment(...
-    '/SCR/ellamil/ravestudy_stats/disco/disco_ips_coif1_mean_linear_zalign.mat',...
-    '/SCR/ellamil/ravestudy_stats/disco/disco_millisecond_songparts.mat',...
-    '/SCR/ellamil/ravestudy_stats/disco/disco_millisecond_wholesongs.mat',...
-    samplerate);
+disco_features(...
+  '/SCR/ellamil/ravestudy_stats/disco/disco_ips_coif1_mean_linear_zalign.mat',...
+  '/SCR/ellamil/ravestudy_stats/disco/features/frame',...
+  {'energy',... % Dynamics
+   'tempo','metroid','mstrength','pulse',... % Rhythm
+   'attack','noise','flux','bright','rough','irregular',... % Timbre
+   'pitch','inharmonic',... % Pitch
+   'mode','hcdf',... % Tone
+   'novel','emotion'}); % High-Level

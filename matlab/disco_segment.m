@@ -1,5 +1,5 @@
-function [model,ftest,stats,contrasts,segment] = disco_segment(input,timefile,songfile,samplerate)
-% [model,ftest,stats,contrasts,segment] = disco_segment(input,timefile,songfile,samplerate)
+function [model,ftest,stats,contrasts,segment,SYNCnorm,SYNCcond] = disco_segment(input,timefile,songfile,samplerate)
+% [model,ftest,stats,contrasts,segment,SYNCnorm,SYNCcond] = disco_segment(input,timefile,songfile,samplerate)
 % Mean (and SD & N) of synchrony time course for each segment (e.g., chorus)
 %   input = Input data file (IPS/CPM,msec)
 %   timefile = File containing segment times in ms
@@ -7,7 +7,10 @@ function [model,ftest,stats,contrasts,segment] = disco_segment(input,timefile,so
 %   samplerate = Sampling rate in ms 
 %   (e.g., ceil(mean of actual rate across Ss) = ceil(18.5594) = 19 ms)
 %
-% [model,ftest,stats,contrasts,segment] = disco_segment(...
+% SYNCnorm = Standardized / normalized synchrony values within each song
+% SYNCcond = Segment number labels (1=intro/outro,2=verse,3=prechorus/bridge,4=chorus,5=interlude)
+%
+% [model,ftest,stats,contrasts,segment,SYNCnorm,SYNCcond] = disco_segment(...
 %     '/SCR/ellamil/ravestudy_stats/disco/disco_ips_coif1_mean_linear_zalign.mat',...
 %     '/SCR/ellamil/ravestudy_stats/disco/disco_millisecond_songparts.mat',...
 %     '/SCR/ellamil/ravestudy_stats/disco/disco_millisecond_wholesongs.mat',...
@@ -29,8 +32,8 @@ load(timefile,'timeMSEC','timeNAME'); segmentMSEC = timeMSEC; segmentNAME = time
 load(songfile,'timeMSEC'); songMSEC = timeMSEC; % songNAME = timeNAME;
 
 % Mean of synchrony timecourse across the middle 5 frequency bands
-band1 = floor(size(SYNC,1) / 5) * 2;
-band2 = band1 + 5 - 1;
+band1 = 6;  % floor(size(SYNC,1) / 5) * 2;
+band2 = 10; % band1 + 5 - 1;
 SYNCmean = mean(SYNC(band1:band2,:))';
 
 
@@ -115,7 +118,7 @@ contrasts = ... % Segment type pairs
 
 stats = zeros(length(contrasts),2);
 for c = 1:length(contrasts)
-    [stats(c,1),stats(c,2)] = linhyptest(beta,sigma,0,contrasts(c,:),dfe); % [p,F]
+    [stats(c,1),stats(c,2)] = linhyptest(beta,sigma,0,contrasts(c,:),dfe); % [p,t]
 end
 
 disp(' ');

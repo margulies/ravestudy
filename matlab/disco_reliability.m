@@ -30,8 +30,8 @@ for p = 1:length(preproc) % For each preprocessing pipeline
     eval(['SYNCb = ',measure,';']);
 
     % Mean of synchrony measure timecourses across the middle 5 frequency bands
-    band1 = floor(size(SYNCa,1) / 5) * 2;
-    band2 = band1 + 5 - 1;
+    band1 = 6;  % floor(size(SYNC,1) / 5) * 2;
+    band2 = 10; % band1 + 5 - 1;
     meanSYNCa = mean(SYNCa(band1:band2,:));
     meanSYNCb = mean(SYNCb(band1:band2,:));
 

@@ -41,8 +41,8 @@ end
 [timeROW,~] = ind2sub(size(timeALL),timeIDX); % Row numbers (indices) of corresponding mean timepoints
 
 % Mean of synchrony timecourse across the middle 5 frequency bands
-band1 = floor(size(SYNC,1) / 5) * 2;
-band2 = band1 + 5 - 1;
+band1 = 6;  % floor(size(SYNC,1) / 5) * 2;
+band2 = 10; % band1 + 5 - 1;
 SYNCmean = mean(SYNC(band1:band2,:))';
 
 % Mean, SD, and N of synchrony timecourse for each song or segment
